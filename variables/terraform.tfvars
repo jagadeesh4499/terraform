@@ -1,0 +1,1 @@
+instance = "t3.micro"
