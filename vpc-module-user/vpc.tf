@@ -1,5 +1,7 @@
 module "vpc" {
   source                = "../vpc-module-developer"
+  #Using Terraform module from GitHub
+  #source = "git::git-URL?ref=branch-name"
   vpc_cidr              = var.vpc_cidr
   project               = var.project
   environment           = var.environment
