@@ -1,5 +1,5 @@
 resource "aws_instance" "terraform" {
-    count = len(var.instance_names)
+    count = length(var.instance_names)
     ami = "ami-09c813fb71547fc4f"
     instance_type = "t2.micro"
     vpc_security_group_ids = [aws_security_group.allow_ssh.id]
@@ -27,7 +27,10 @@ resource "aws_security_group" "allow_ssh"{
         cidr_blocks = ["0.0.0.0/0"] # allows from any anyone i.e, any IP address
         ipv6_cidr_blocks = ["::/0"]
     }
-    tags = {
+    tags = merge(
+        var.common_tags,
+        {
         Name = "allow_ssh"
-    }
+        }
+    )
 }
