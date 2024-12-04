@@ -1,10 +1,14 @@
-resource "aws_instance" "terraform" {
-  ami                    = "ami-09c813fb71547fc4f"
-  instance_type          = var.environment == "prod" ? "t3.micro" : "t2.micro"
+resource "aws_instance" "expense" {
+  count                  = length(var.instance_names)
+  ami                    = data.aws_ami.ami_id.id
+  instance_type          = var.instance_names[count.index] == "mysql" ? "t3.micro" : "t2.micro"
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
-  tags = {
-    Name = "terraform"
-  }
+  tags = merge(
+    var.common_tags,
+    {
+      Name = var.instance_names[count.index]
+    }
+  )
 }
 resource "aws_security_group" "allow_ssh" {
   name        = "allow ssh"
@@ -23,7 +27,10 @@ resource "aws_security_group" "allow_ssh" {
     cidr_blocks      = ["0.0.0.0/0"] # allows from any anyone i.e, any IP address
     ipv6_cidr_blocks = ["::/0"]
   }
-  tags = {
-    Name = "allow_ssh"
-  }
+  tags = merge(
+    var.common_tags,
+    {
+      Name = "allow_ssh"
+    }
+  )
 }

@@ -1,4 +1,4 @@
 variable "environment" {
-    default = "dev"
-    type = string
+  default = "dev"
+  type    = string
 }
